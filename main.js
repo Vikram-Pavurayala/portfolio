@@ -2,17 +2,13 @@ import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-
-//import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-//import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-//import {apple} from './script.js';
 const scene = new THREE.Scene();//creating a scene
 
 const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);//creating a camera
 camera.position.x = -10;
 camera.position.z = 13.5;
 camera.position.y = 3.5;
-//camera.rotation.y = -2.6;
+
 
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -28,11 +24,14 @@ sunLight.position.y = 15;
 scene.add(sunLight);
 
 
-// const geometry = new THREE.BoxGeometry( 1, 1, 1);
-// const material = new THREE.MeshBasicMaterial({color:0x0000ff});
-// const cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
-// camera.position.z = 5;
+function onWindowResize(){
+	camera.aspect = window.innerWidth / (window.innerHeight);
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+
+
 
 
 //ADDING FLOOR
@@ -234,7 +233,7 @@ computerModel.load('assets/ac.glb', function(gltf) {
 
 
 
-function addImage(imageUrl, width, height, position){
+function addImage(imageUrl, width, height, position, message){
     const textureLoader = new THREE.TextureLoader();
     const imageTexture = textureLoader.load(imageUrl);
     const imageMaterial = new THREE.MeshBasicMaterial({
@@ -243,23 +242,67 @@ function addImage(imageUrl, width, height, position){
     const imageGeometery = new THREE.PlaneGeometry(width, height);
     const image = new THREE.Mesh(imageGeometery, imageMaterial);
     image.position.set(position.x, position.y, position.z);
+
+
+
+
+    renderer.domElement.addEventListener("click", onMouseClick, false);
+
+    function onMouseClick(event) {
+        event.preventDefault();
+
+        // Calculate mouse position in normalized device coordinates (-1 to +1)
+        const mouse = new THREE.Vector2();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Create a raycaster
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+        
+        raycaster.near = 0.001; // Set the near distance to a small value
+        raycaster.far = 10000; 
+        
+
+        // Check for intersections with the model
+        const intersects = raycaster.intersectObject(image);
+
+        if (intersects.length > 0) {
+            
+            let details = document.getElementById("message");
+            details.innerText = message;
+            details.style.display = "block";
+            
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     return image;
 }
 
-const image1 = addImage("assets/image1.jpg",3,3,new THREE.Vector3(-14.9,5,1));
-const image2= addImage("assets/image2.jpeg",3,3,new THREE.Vector3(-14.9,5,-5));
+const image1 = addImage("assets/image1.jpg",3,3,new THREE.Vector3(-14.9,5,1),"I'm a huge fan of anime because it's incredibly creative and tells captivating stories. My top picks are Demon Slayer and Your Name. Demon Slayer is visually stunning and follows the journey of a boy fighting demons to protect his family. Your Name, on the other hand, weaves a beautiful tale of romance and fantasy across time. Both of these shows remind me of why I fell in love with anime in the first place – its ability to tell unique and compelling stories that transport me to different worlds.");
+const image2= addImage("assets/image2.jpeg",3,3,new THREE.Vector3(-14.9,5,-5),"I'm a huge fan of anime because it's incredibly creative and tells captivating stories. My top picks are Demon Slayer and Your Name. Demon Slayer is visually stunning and follows the journey of a boy fighting demons to protect his family. Your Name, on the other hand, weaves a beautiful tale of romance and fantasy across time. Both of these shows remind me of why I fell in love with anime in the first place – its ability to tell unique and compelling stories that transport me to different worlds.");
 image1.rotation.y = Math.PI/2;
 image2.rotation.y= Math.PI/2;
-const image3 = addImage("assets/image3.jpeg",5,3,new THREE.Vector3(-10,5,-14.9));
-const image4 = addImage("assets/image4.jpeg",5,3,new THREE.Vector3(-3,5,-14.9));
-const image5 = addImage("assets/image5.jpg",5,3,new THREE.Vector3(4,5,-14.9));
-const image6 = addImage("assets/image6.jpg",5,3,new THREE.Vector3(11,5,-14.9));
-const image7 = addImage("assets/image7.png",5,3,new THREE.Vector3(14.9,6,-10));
-const image8 = addImage("assets/image8.jpg",5,3,new THREE.Vector3(14.9,2,-10));
-const image9 = addImage("assets/image9.jpg",5,3,new THREE.Vector3(14.9,3.5,-4));
-const image10 = addImage("assets/image10.jpg",3,6,new THREE.Vector3(14.9,3.5,2));
-const image11 = addImage("assets/image11.jpg",3,6,new THREE.Vector3(14.9,3.5,6));
-const image12 = addImage("assets/image12.jpg",7,7,new THREE.Vector3(6,4,14.9));
+const image3 = addImage("assets/image3.jpeg",5,3,new THREE.Vector3(-10,5,-14.9)," Same as Among Us Playing Free Fire isn't just about the game for me; it's a way to connect with friends while having a blast. It's amazing how it brings us together, strategizing and chatting while we play. Free Fire isn't just a game; it's a social experience that lets me bond with my friends as we battle it out and have a great time.");
+const image4 = addImage("assets/image4.jpeg",5,3,new THREE.Vector3(-3,5,-14.9),"Same a Free Fire Among Us isn't just another game for me; it's a chance to enjoy some quality time with friends while having loads of fun. I absolutely love the thrill of fooling my friends as we navigate through tasks and try to uncover the impostor. It's incredible how Among Us creates these moments of laughter and suspense, where every game is a new adventure filled with excitement and trickery. Among Us isn't just a game; it's a platform for unforgettable memories and endless enjoyment with my friends.");
+const image5 = addImage("assets/image5.jpg",5,3,new THREE.Vector3(4,5,-14.9),"Check out this pic of my friends – the brainy bunch! 🤓 They're like superheroes, but instead of capes, they wear glasses and wield calculators. Who needs muscles when you've got brains? #SmartSquad 💡");
+const image6 = addImage("assets/image6.jpg",5,3,new THREE.Vector3(11,5,-14.9),"In our university, my classmates are a diverse group of people who come together to learn. Some are really smart and always studying hard. Others like to have fun and enjoy their time on campus. Some are funny and make everyone laugh during class. And then there are those who are quiet but really good at their studies. We all face challenges like exams and assignments, but we support each other and work together to succeed. My classmates aren't just classmates; they're like friends sharing this journey of higher education with me.");
+const image7 = addImage("assets/image7.png",5,3,new THREE.Vector3(14.9,6,-10)," These certificates are more than just decorative pixels on a screen. They're evidence of the skills and knowledge I've accumulated along my journey.(Just kidding I made them my self)");
+const image8 = addImage("assets/image8.jpg",5,3,new THREE.Vector3(14.9,2,-10),"These certificates are more than just decorative pixels on a screen. They're evidence of the skills and knowledge I've accumulated along my journey.(Just kidding I made them my self)");
+const image9 = addImage("assets/image9.jpg",5,3,new THREE.Vector3(14.9,3.5,-4),"These certificates are more than just decorative pixels on a screen. They're evidence of the skills and knowledge I've accumulated along my journey.(Just kidding I made them my self)");
+const image10 = addImage("assets/image10.jpg",3,6,new THREE.Vector3(14.9,3.5,2),"My bucket list is a compilation of my wildest dreams and deepest desires, a roadmap for my journey through life. It's a reflection of who I am, what I value, and the experiences I long to have. But not every dream on my list has been realized, at least not yet. Some seem daunting, requiring courage and perseverance beyond my current reach. Others demand resources or circumstances that are beyond my control. Yet, I hold onto the belief that one day, they will be achieved. So, as I journey through life, I find joy in the pursuit of my dreams, knowing that every unchecked box represents a future adventure waiting to be experienced. And with each step I take, I move closer to turning those dreams into reality. ");
+const image11 = addImage("assets/image11.jpg",3,6,new THREE.Vector3(14.9,3.5,6),"My resume is a summary of my professional journey, highlighting my skills, experiences, and achievements. It showcases my expertise and demonstrates my value to potential employers. As I progress in my career, my resume evolves to reflect my growth and aspirations.");
+const image12 = addImage("assets/image12.jpg",7,7,new THREE.Vector3(6,4,14.9),"Family is my anchor, offering love, support, and belonging. They are there through thick and thin, sharing in life's highs and lows. Their presence shapes who I am and reminds me of the importance of connection and unconditional love.");
 image7.rotation.y = -Math.PI/2;
 image8.rotation.y = -Math.PI/2;
 image9.rotation.y = -Math.PI/2;
@@ -267,10 +310,6 @@ image10.rotation.y = -Math.PI/2;
 image11.rotation.y = -Math.PI/2;
 image12.rotation.y = Math.PI;
 scene.add(image1,image2,image3,image4,image5,image6,image7,image8,image9,image10,image11,image12);
-
-
-
-
 
 
 
@@ -316,6 +355,7 @@ function onMouseMove(event) {
     // Check if dragging flag is set
     if (isDragging) {
         // Calculate the change in mouse position
+        document.getElementById("message").style.display = "none";
         const deltaX = event.clientX - previousMouseX;
         
         // Update previous mouse position
@@ -354,13 +394,13 @@ function onKeyDown(event){
     const currentPosition = camera.position.clone();
 
     // Adjust camera position based on the key pressed
-    if(keycode == 38){ // Right arrow
+    if(keycode == 87){ // W 
         currentPosition.add(direction.clone().multiplyScalar(0.5)); // Move in the direction the camera is facing
     }
-    else if(keycode == 40){ // Left arrow
+    else if(keycode == 83){ // S
         currentPosition.sub(direction.clone().multiplyScalar(0.5)); // Move opposite to the direction the camera is facing
     }
-    else if(keycode == 37){ 
+    else if(keycode == 65){ // A
         let right = new THREE.Vector3();
         camera.getWorldDirection(right);
         right.normalize();
@@ -370,7 +410,7 @@ function onKeyDown(event){
         forward.normalize();
         currentPosition.sub(forward.clone().multiplyScalar(0.5)); // Move forward based on camera's facing direction
     }
-    else if(keycode == 39){ 
+    else if(keycode == 68){ // D
         let right = new THREE.Vector3();
         camera.getWorldDirection(right);
         right.normalize();
@@ -397,8 +437,73 @@ function onKeyDown(event){
 
 /* CAMERA MOVEMENT END */
 
+
+/* MOBILE TOUCH CAMERA CONTROLS START */
+
+document.addEventListener("touchstart", onTouchStart, false);
+document.addEventListener("touchmove", onTouchMove, false);
+document.addEventListener("touchend", onTouchEnd, false);
+
+let previousTouchX = 0;
+let previousTouchY = 0;
+
+function onTouchStart(event) {
+    // Store initial touch position
+    previousTouchX = event.touches[0].clientX;
+    previousTouchY = event.touches[0].clientY;
+}
+
+function onTouchMove(event) {
+    // Calculate the change in touch position
+    document.getElementById("message").style.display = "none";
+    const deltaX = event.touches[0].clientX - previousTouchX;
+    const deltaY = event.touches[0].clientY - previousTouchY;
+
+    // Update previous touch position
+    previousTouchX = event.touches[0].clientX;
+    previousTouchY = event.touches[0].clientY;
+
+    // Convert touch movement to a direction vector based on camera rotation
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+    direction.normalize();
+
+    // Adjust camera position based on touch movement
+    const sensitivity = 0.005; // Adjust the sensitivity as needed
+    camera.rotation.y -= deltaX * sensitivity;
+    const moveVector = new THREE.Vector3(deltaX * sensitivity, 0, deltaY * sensitivity);
+    const rotationMatrix = new THREE.Matrix4().makeRotationY(camera.rotation.y);
+    moveVector.applyMatrix4(rotationMatrix);
+    camera.position.add(moveVector);
+
+    // Limit camera position within room boundaries
+    const roomWidth = 25;
+    const roomDepth = 25;
+    
+    camera.position.z = Math.min(Math.max(camera.position.z, -roomDepth / 2), roomDepth / 2);
+}
+
+function onTouchEnd(event) {
+    // Reset previous touch positions
+    previousTouchX = 0;
+    previousTouchY = 0;
+}
+
+/* MOBILE TOUCH CAMERA CONTROLS END */
+
+
+
+
+
+
 function animate(){
     requestAnimationFrame(animate);
+
+    window.addEventListener("resize", onWindowResize, false);
+
+
+
+    
     renderer.render(scene, camera);
 }
 
