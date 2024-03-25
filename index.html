@@ -6,10 +6,38 @@
 		content="width=device-width"
 		 intial-scale="1.0">
 	<title>Vikram Pavurayala</title>
+	<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div id="info" class="info">
+	<div id="preloader">
+		<h3>Loading...</h3>
+	</div>
+	<div id="info">
+		
+			<h1>WELCOME</h1>
+			
+			<h2>DESKTOP CONTROLS : </h2>
+			<p>
+				<ul>
+					<li><b>USE " W A S D "</b> to move around</li>
+					<li><b>USE " MOUSE OR TOUCHPAD "</b> to look around</li>
+				</ul>
+			</p>
+
+			<h2>MOBILE CONTROLS : </h2>
+			<p>
+				<ul>
+					<li><b>" SWIPE UP "</b> to move forward</li>
+					<li><b>" SWIPE DOWN "</b> to move backward</li>
+					<li><b>" SWIPE LEFT OR RIGHT "</b> to look around</li>
+				</ul>
+			</p>
+
+			<button onclick = "start()" >CLOSE CONTROLS</button>
+		
+	</div>
+	<div id="message" class="message">
 
 	</div>
 	<div id="canvas">
@@ -25,5 +53,13 @@
 		}
 	</script>
 	<script type="module" src="main.js"></script>
+	<script>
+		function start(){
+			document.getElementById("info").style.display = "none";
+		}
+		window.addEventListener("load", function(){
+			document.getElementById("preloader").style.display = "none";
+		});
+	</script>
 </body>
 </html>
