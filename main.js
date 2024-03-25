@@ -479,7 +479,8 @@ function onTouchMove(event) {
     // Limit camera position within room boundaries
     const roomWidth = 25;
     const roomDepth = 25;
-    
+
+    camera.position.x = Math.min(Math.max(camera.position.x, -roomWidth / 2), roomWidth / 2);
     camera.position.z = Math.min(Math.max(camera.position.z, -roomDepth / 2), roomDepth / 2);
 }
 
