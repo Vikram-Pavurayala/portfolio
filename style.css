@@ -6,6 +6,7 @@
 }
 .message{
     display: none;
+    font-size: 10px;
     position: absolute;
     font-family: "Luckiest Guy", cursive;
     background-color: aqua;
@@ -17,7 +18,7 @@
     left:50%;
     transform: translateX(-50%);
     border-radius: 20px;
-    padding: 20px;
+    padding: 10px;
     z-index: 999;
 }
 #info{
