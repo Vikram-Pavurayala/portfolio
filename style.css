@@ -12,7 +12,7 @@
     background-color: aqua;
     text-align: center;
     width: 80%;
-    height: 100px;
+    min-height: 100px;
     margin:0px auto;
     bottom: 10px;
     left:50%;
