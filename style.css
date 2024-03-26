@@ -6,13 +6,13 @@
 }
 .message{
     display: none;
-    font-size: 10px;
+    font-size: 15px;
     position: absolute;
     font-family: "Luckiest Guy", cursive;
     background-color: aqua;
     text-align: center;
     width: 80%;
-    height: 100px;
+    min-height: 100px;
     margin:0px auto;
     bottom: 10px;
     left:50%;
