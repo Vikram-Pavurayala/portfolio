@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,36 +7,43 @@
     <!-- Load the Google Platform Library -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Specify your client ID -->
-    <meta name="google-signin-client_id" content="953064740143-fjvhrvtde9pjpk43s902o4gl8kin5mfi.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
 <body>
     <!-- Google Sign-In button -->
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <!-- Container to display user information -->
+    <div id="user-info" style="display:none;">
+        <h3>User Information</h3>
+        <p id="user-name"></p>
+        <p id="user-email"></p>
+        <img id="user-image" src="" alt="User Image">
+    </div>
 
     <script>
         // Function called when a user successfully signs in
         function onSignIn(googleUser) {
             // Get the user's profile information
             const profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId());
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail());
-            
+            const userInfoDiv = document.getElementById('user-info');
+            document.getElementById('user-name').innerText = 'Name: ' + profile.getName();
+            document.getElementById('user-email').innerText = 'Email: ' + profile.getEmail();
+            document.getElementById('user-image').src = profile.getImageUrl();
+            userInfoDiv.style.display = 'block';
+
             // Get the user's ID token
             const id_token = googleUser.getAuthResponse().id_token;
             console.log('ID Token: ' + id_token);
 
-            // Optionally, you can send the ID token to your server for verification
-            // Example:
-            // fetch('/tokensignin', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({ id_token: id_token })
-            // }).then(response => response.json())
-            //   .then(data => console.log(data));
+            // Send the ID token to your server for verification
+            fetch('/tokensignin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_token: id_token })
+            }).then(response => response.json())
+              .then(data => console.log(data));
         }
     </script>
 </body>
