@@ -1,64 +1,45 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" 
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<title>Vikram Pavurayala</title>
-	<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy" rel="stylesheet">
-	<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In Example</title>
+    <!-- Load the Google Platform Library -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Specify your client ID -->
+    <meta name="google-signin-client_id" content="953064740143-fjvhrvtde9pjpk43s902o4gl8kin5mfi.apps.googleusercontent.com">
 </head>
 <body>
-	<div id="preloader">
-		<h3>Loading...</h3>
-	</div>
-	<div id="info">
-		
-			<h1>WELCOME</h1>
-			
-			<h2>DESKTOP CONTROLS : </h2>
-			<p>
-				<ul>
-					<li><b>USE " W A S D "</b> to move around</li>
-					<li><b>USE " MOUSE OR TOUCHPAD "</b> to look around</li>
-				</ul>
-			</p>
+    <!-- Google Sign-In button -->
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
 
-			<h2>MOBILE CONTROLS : </h2>
-			<p>
-				<ul>
-					<li><b>" SWIPE UP "</b> to move forward</li>
-					<li><b>" SWIPE DOWN "</b> to move backward</li>
-					<li><b>" SWIPE LEFT OR RIGHT "</b> to look around</li>
-				</ul>
-			</p>
+    <script>
+        // Function called when a user successfully signs in
+        function onSignIn(googleUser) {
+            // Get the user's profile information
+            const profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId());
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+            
+            // Get the user's ID token
+            const id_token = googleUser.getAuthResponse().id_token;
+            console.log('ID Token: ' + id_token);
 
-			<button onclick = "start()" >CLOSE CONTROLS</button>
-		
-	</div>
-	<div id="message" class="message">
-
-	</div>
-	<div id="canvas">
-
-	</div>
-
-	<script type="importmap">
-		{
-		  "imports": {
-			"three": "https://unpkg.com/three@0.162.0/build/three.module.js",
-			"three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
-		  }
-		}
-	</script>
-	<script type="module" src="main.js"></script>
-	<script>
-		function start(){
-			document.getElementById("info").style.display = "none";
-		}
-		window.addEventListener("load", function(){
-			document.getElementById("preloader").style.display = "none";
-		});
-	</script>
+            // Optionally, you can send the ID token to your server for verification
+            // Example:
+            // fetch('/tokensignin', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({ id_token: id_token })
+            // }).then(response => response.json())
+            //   .then(data => console.log(data));
+        }
+    </script>
 </body>
 </html>
